@@ -168,8 +168,8 @@ var readFiles = function() {
             return cb(null, file);
         }
         if (file.isBuffer()) {
-            var finalFile = writeHtml(transformHtml(new String(file.contents)), file);
-            cb(null, finalFile);
+            file.contents = new Buffer(transformHtml(new String(file.contents)));
+            cb(null, file);
         }
     });
 };
@@ -334,16 +334,4 @@ var writeHeader = function (jsonData, writeHeadTag) {
     return headContent;
 };
 
-var writeHtml = function(newContent, file) {
-    var newFile = fs.writeFile(file.path, newContent,  function(err) {
-        if (err) {
-            return console.error(err);
-        }
-        else {
-            console.log("[FancyMeta] Data written successfully.");
-            console.log("[FancyMeta] Verify possible duplicated Metadata in your <head>!");
-        }
-    });
-    return newFile;
-};
 module.exports = readFiles;
